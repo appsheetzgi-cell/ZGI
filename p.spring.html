@@ -48,23 +48,7 @@
   <!-- Iframe Looker Studio -->
   <iframe id="content" src="https://lookerstudio.google.com/embed/reporting/146612d8-7826-425a-9282-9bce62946020/page/p_3zn8mwfeud" frameborder="0"></iframe>
 
-  <!-- Jam overlay -->
-  <div id="clock-container">
-    <div id="clock-label">JAM</div>
-    <div id="clock" aria-live="polite">--:--:--</div>
-  </div>
 
-  <script>
-    function two(n){ return n<10 ? '0'+n : n; }
-    function updateClock(){
-      const now = new Date();
-      const hh = two(now.getHours());
-      const mm = two(now.getMinutes());
-      const ss = two(now.getSeconds());
-      document.getElementById('clock').innerText = `${hh}:${mm}:${ss}`;
-    }
-    updateClock();
-    setInterval(updateClock, 1000); // update tiap detik
-  </script>
 </body>
 </html>
+
