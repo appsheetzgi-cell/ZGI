@@ -15,14 +15,14 @@
     /* Container jam */
     #clock-container {
       position: fixed;
-      top: 100px;
+      Bottom: 112px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 9999;
       text-align: center;
     }
     #clock-label {
-      font-size: 40px;
+      font-size: 27px;
       font-weight: 600;
       color: black;
       margin-bottom: 4px;
@@ -33,7 +33,7 @@
       border: 1px solid black;
       padding: 3px 10px;
       border-radius: 8px;
-      font-size: 75px;
+      font-size: 70px;
       font-weight: 600;
       text-shadow: -2px -2px 0 white,
                    1px -1px 0 white,
@@ -55,8 +55,7 @@
   <script>
     // Daftar page Looker Studio (isi dengan ID page masing-masing)
     const pages = [
-      "https://lookerstudio.google.com/embed/reporting/59e67de2-4b46-4fea-944c-42491d2667fa/page/p_h1jc10frwd?rm=minimal",
-      "https://lookerstudio.google.com/embed/reporting/59e67de2-4b46-4fea-944c-42491d2667fa/page/p_ca1hmicswd?rm=minimal"
+      "https://lookerstudio.google.com/embed/reporting/59e67de2-4b46-4fea-944c-42491d2667fa/page/p_5o0h2xy7wd?rm=minimal"
       
     ];
 
@@ -65,12 +64,6 @@
 
     // Tampilkan halaman pertama
     iframe.src = pages[currentPage];
-
-    // Ganti halaman tiap 5 menit (300000 ms)
-    setInterval(() => {
-      currentPage = (currentPage + 1) % pages.length;
-      iframe.src = pages[currentPage];
-    }, 300000);
 
     // Fungsi jam digital
     function two(n){ return n<10 ? '0'+n : n; }
@@ -86,4 +79,3 @@
   </script>
 </body>
 </html>
-
