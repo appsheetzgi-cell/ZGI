@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Hourly Packing Foam</title>
   <style>
-    body, html { height:100%; margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial; }
+    body, html {
+      height:100%;
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial;
+    }
     /* Container iframe */
     #content {
       width:100%;
@@ -15,14 +19,14 @@
     /* Container jam */
     #clock-container {
       position: fixed;
-      top: 100px;
+      bottom: 112px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 9999;
       text-align: center;
     }
     #clock-label {
-      font-size: 40px;
+      font-size: 27px;
       font-weight: 600;
       color: black;
       margin-bottom: 4px;
@@ -33,7 +37,7 @@
       border: 1px solid black;
       padding: 3px 10px;
       border-radius: 8px;
-      font-size: 75px;
+      font-size: 70px;
       font-weight: 600;
       text-shadow: -2px -2px 0 white,
                    1px -1px 0 white,
@@ -53,11 +57,9 @@
   </div>
 
   <script>
-    // Daftar page Looker Studio (isi dengan ID page masing-masing)
+    // Daftar page Looker Studio
     const pages = [
-      "https://lookerstudio.google.com/embed/reporting/59e67de2-4b46-4fea-944c-42491d2667fa/page/p_pzaj7zirwd?rm=minimal",
-      "https://lookerstudio.google.com/embed/reporting/59e67de2-4b46-4fea-944c-42491d2667fa/page/p_9voseicswd?rm=minimal"
-      
+      "https://lookerstudio.google.com/embed/reporting/59e67de2-4b46-4fea-944c-42491d2667fa/page/p_zdzio3t8wd?rm=minimal"
     ];
 
     let currentPage = 0;
@@ -66,11 +68,14 @@
     // Tampilkan halaman pertama
     iframe.src = pages[currentPage];
 
-    // Ganti halaman tiap 1 menit (60000 ms)
+    // === AUTO REFRESH SETIAP 5 MENIT ===
+    const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 menit = 300.000 ms
     setInterval(() => {
-      currentPage = (currentPage + 1) % pages.length;
-      iframe.src = pages[currentPage];
-    }, 60000);
+      console.log("⟳ Refresh iframe Looker Studio...");
+      // Cara refresh cepat tanpa reload seluruh halaman
+      iframe.src = iframe.src.split('?')[0] + '?t=' + new Date().getTime();
+    }, REFRESH_INTERVAL);
+    // ====================================
 
     // Fungsi jam digital
     function two(n){ return n<10 ? '0'+n : n; }
