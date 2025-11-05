@@ -69,7 +69,7 @@
     iframe.src = pages[currentPage];
 
     // === AUTO REFRESH SETIAP 5 MENIT ===
-    const REFRESH_INTERVAL = 2 * 60 * 1000; // 2 menit = 120.000 ms
+    const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 menit = 300.000 ms
     setInterval(() => {
       console.log("⟳ Refresh iframe Looker Studio...");
       // Cara refresh cepat tanpa reload seluruh halaman
@@ -91,3 +91,4 @@
   </script>
 </body>
 </html>
+
