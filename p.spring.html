@@ -62,14 +62,6 @@
     // Tampilkan halaman pertama
     iframe.src = pages[currentPage];
 
-    // === AUTO REFRESH SETIAP 5 MENIT ===
-    const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 menit = 300.000 ms
-    setInterval(() => {
-      console.log("⟳ Refresh iframe Looker Studio...");
-      // Cara refresh cepat tanpa reload seluruh halaman
-      iframe.src = iframe.src.split('?')[0] + '?t=' + new Date().getTime();
-    }, REFRESH_INTERVAL);
-    // ====================================
 
     // Fungsi jam digital
     function two(n){ return n<10 ? '0'+n : n; }
@@ -85,4 +77,5 @@
   </script>
 </body>
 </html>
+
 
