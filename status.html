@@ -122,10 +122,10 @@ th {
 </style>
 </head>
 <body>
-
+<h1>Input Week</h1>
 <form id="weekForm">
   <input type="number" id="week" name="week" placeholder="Week" required>
-  <button type="submit">Simpan</button>
+  <button type="submit">Cari</button>
 </form>
 
 <div id="msg"></div>
@@ -230,13 +230,10 @@ document.getElementById("weekForm").addEventListener("submit", function(e) {
     },
     body: `week=${encodeURIComponent(week)}`
   })
-  .then(res => res.text())
   .then(res => {
-    msg.innerText = "Data berhasil disimpan";
-    msg.style.color = "green";
-
-    // Refresh tabel PRODUKSI & EXPORT
+    // Refresh tabel PRODUKSI & EXPORT tanpa menampilkan pesan
     loadTables();
+})
   })
   .catch(err => {
     msg.innerText = "Gagal menyimpan data";
