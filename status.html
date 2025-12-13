@@ -3,30 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <title>Status Produksi</title>
+
 <style>
 :root {
   --primary: #1e88e5;
-  --secondary: #e3f2fd;
   --success: #2e7d32;
   --danger: #d32f2f;
-  --text-dark: #333;
+  --bg: #f4f6f8;
 }
 
 body {
   font-family: "Segoe UI", Tahoma, sans-serif;
-  background: linear-gradient(135deg, #f4f6f8, #eef3f7);
+  background: var(--bg);
   padding: 30px;
-  color: var(--text-dark);
 }
 
 h1 {
   text-align: center;
-  margin: 40px 0 20px;
   color: var(--primary);
-  letter-spacing: 1px;
+  margin: 40px 0 20px;
 }
 
-/* Form */
+/* FORM */
 form {
   display: flex;
   justify-content: center;
@@ -43,19 +41,18 @@ form input {
 
 form button {
   background: var(--primary);
-  color: #fff;
+  color: white;
   border: none;
-  padding: 8px 18px;
+  padding: 8px 20px;
   border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 form button:hover {
   background: #1565c0;
 }
 
-/* Section */
+/* SECTION */
 .section {
   margin-bottom: 45px;
 }
@@ -64,82 +61,68 @@ form button:hover {
   background: var(--primary);
   color: white;
   padding: 8px 18px;
-  display: inline-block;
   font-weight: 600;
   border-radius: 6px;
+  display: inline-block;
   margin-bottom: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-/* Table */
+/* TABLE */
 table {
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
   background: white;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
 th, td {
+  border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
-  border-bottom: 1px solid #e0e0e0;
 }
 
 th {
-  background: var(--secondary);
+  background: #e3f2fd;
   font-weight: 600;
 }
 
-tr:hover {
-  background: #f9fbfd;
-}
-
-/* Status & Balance */
-.balance-negative {
-  color: var(--danger);
-  font-weight: bold;
-}
-
-.status-not {
-  background: var(--danger);
-  color: white;
-  font-weight: bold;
-  border-radius: 6px;
-  padding: 4px 8px;
-  display: inline-block;
-}
-
-td:last-child:not(.status-not) {
+/* STATUS */
+.status-ok {
   color: var(--success);
   font-weight: 600;
 }
 
-/* Responsive */
+.status-not {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* BALANCE */
+.balance-negative {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
   body {
     padding: 15px;
   }
-
   table {
     font-size: 13px;
-  }
-
-  h1 {
-    font-size: 22px;
   }
 }
 </style>
 </head>
+
 <body>
 
-  
 <form
   method="POST"
   action="https://script.google.com/macros/s/AKfycbxZsvwtYSqdYlshXDfmi5JfjLELs3l-IDFf8JMEl0dKbByQTVQfEUkv0ANIDXJHipRR/exec"
 >
-  <input type="number" name="week" required>
+  <input type="number" name="week" placeholder="Week" required>
   <button type="submit">Simpan</button>
 </form>
 
@@ -150,89 +133,94 @@ td:last-child:not(.status-not) {
 <div id="export"></div>
 
 <script>
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0nVNWtyTP5CJkOFoC5Ga31U-NroZ-7EsjHQL_TuzkpjXUso7hEWA6NWpYQeydSGshWd4vJCgOeTZG/pub?gid=1353631758&single=true&output=csv";
+const CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0nVNWtyTP5CJkOFoC5Ga31U-NroZ-7EsjHQL_TuzkpjXUso7hEWA6NWpYQeydSGshWd4vJCgOeTZG/pub?gid=1353631758&single=true&output=csv";
 
 fetch(CSV_URL)
-.then(r => r.text())
-.then(csv => {
-  const rows = csv.trim().split("\n").map(r => r.split(","));
+  .then(r => r.text())
+  .then(csv => {
+    const rows = csv.trim().split("\n").map(r => r.split(","));
 
-  // ===== PRODUKSI =====
-  const prodFoam   = rows.slice(6, 11);
-  const prodTopper = rows.slice(14, 19);
-  const prodSpring = rows.slice(22, 27);
+    const prodFoam   = rows.slice(6, 11);
+    const prodTopper = rows.slice(14, 19);
+    const prodSpring = rows.slice(22, 27);
 
-  // ===== EXPORT =====
-  const expFoam   = rows.slice(6, 11);
-  const expTopper = rows.slice(14, 19);
-  const expSpring = rows.slice(22, 27);
+    const expFoam   = rows.slice(6, 11);
+    const expTopper = rows.slice(14, 19);
+    const expSpring = rows.slice(22, 27);
 
-  function renderTable(containerId, title, data, col) {
-    document.getElementById(containerId).innerHTML += `
-      <div class="section">
-        <div class="section-title">${title}</div>
-        <table>
-          <thead>
-            <tr>
-              <th>Week</th>
-              <th>${col.qty1}</th>
-              <th>${col.qty2}</th>
-              <th>Balance</th>
-              <th>Persentase</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${data.map(r => `
+    function renderTable(containerId, title, data, col) {
+      document.getElementById(containerId).innerHTML += `
+        <div class="section">
+          <div class="section-title">${title}</div>
+          <table>
+            <thead>
               <tr>
-                <td>${r[col.week]}</td>
-                <td>${r[col.q1]}</td>
-                <td>${r[col.q2]}</td>
-                <td class="${Number(r[col.balance]) < 0 ? 'balance-negative' : ''}">
-                  ${r[col.balance]}
-                </td>
-                <td>${r[col.persen]}</td>
-                <td class="${r[col.status].toLowerCase().includes('not') ? 'status-not' : ''}">
-                  ${r[col.status]}
-                </td>
+                <th>Week</th>
+                <th>${col.qty1}</th>
+                <th>${col.qty2}</th>
+                <th>Balance</th>
+                <th>Persentase</th>
+                <th>Status</th>
               </tr>
-            `).join("")}
-          </tbody>
-        </table>
-      </div>
-    `;
-  }
+            </thead>
+            <tbody>
+              ${data.map(r => `
+                <tr>
+                  <td>${r[col.week]}</td>
+                  <td>${r[col.q1]}</td>
+                  <td>${r[col.q2]}</td>
+                  <td class="${Number(r[col.balance]) < 0 ? 'balance-negative' : ''}">
+                    ${r[col.balance]}
+                  </td>
+                  <td>${r[col.persen]}</td>
+                  <td class="${
+                    r[col.status].toLowerCase().includes('not')
+                      ? 'status-not'
+                      : 'status-ok'
+                  }">
+                    ${r[col.status]}
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
 
-  // PRODUKSI
-  renderTable("app", "Foam_Packing", prodFoam, {
-    week:1, q1:2, q2:3, balance:4, persen:5, status:6,
-    qty1:"Qty Order", qty2:"Qty Produksi"
-  });
-  renderTable("app", "Topper", prodTopper, {
-    week:1, q1:2, q2:3, balance:4, persen:5, status:6,
-    qty1:"Qty Order", qty2:"Qty Produksi"
-  });
-  renderTable("app", "Spring_Packing", prodSpring, {
-    week:1, q1:2, q2:3, balance:4, persen:5, status:6,
-    qty1:"Qty Order", qty2:"Qty Produksi"
-  });
+    // PRODUKSI
+    renderTable("app", "Foam_Packing", prodFoam, {
+      week:1, q1:2, q2:3, balance:4, persen:5, status:6,
+      qty1:"Qty Order", qty2:"Qty Produksi"
+    });
 
-  // EXPORT
-  renderTable("export", "Foam_Packing", expFoam, {
-    week:8, q1:9, q2:10, balance:11, persen:12, status:13,
-    qty1:"Qty Plan", qty2:"Qty Export"
-  });
-  renderTable("export", "Topper", expTopper, {
-    week:8, q1:9, q2:10, balance:11, persen:12, status:13,
-    qty1:"Qty Plan", qty2:"Qty Export"
-  });
-  renderTable("export", "Spring_Packing", expSpring, {
-    week:8, q1:9, q2:10, balance:11, persen:12, status:13,
-    qty1:"Qty Plan", qty2:"Qty Export"
-  });
+    renderTable("app", "Topper", prodTopper, {
+      week:1, q1:2, q2:3, balance:4, persen:5, status:6,
+      qty1:"Qty Order", qty2:"Qty Produksi"
+    });
 
+    renderTable("app", "Spring_Packing", prodSpring, {
+      week:1, q1:2, q2:3, balance:4, persen:5, status:6,
+      qty1:"Qty Order", qty2:"Qty Produksi"
+    });
+
+    // EXPORT
+    renderTable("export", "Foam_Packing", expFoam, {
+      week:8, q1:9, q2:10, balance:11, persen:12, status:13,
+      qty1:"Qty Plan", qty2:"Qty Export"
+    });
+
+    renderTable("export", "Topper", expTopper, {
+      week:8, q1:9, q2:10, balance:11, persen:12, status:13,
+      qty1:"Qty Plan", qty2:"Qty Export"
+    });
+
+    renderTable("export", "Spring_Packing", expSpring, {
+      week:8, q1:9, q2:10, balance:11, persen:12, status:13,
+      qty1:"Qty Plan", qty2:"Qty Export"
+    });
 });
-  
 </script>
 
 </body>
