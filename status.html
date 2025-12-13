@@ -48,6 +48,24 @@ th {
 </head>
 <body>
 
+  <div class="section">
+  <div class="section-title">INPUT WEEK</div>
+  <form id="weekForm">
+    <input
+      type="number"
+      id="week"
+      placeholder="Masukkan Week"
+      required
+      style="padding:6px;width:160px;"
+    >
+    <button type="submit" style="padding:6px 14px;">
+      Simpan
+    </button>
+  </form>
+  <p id="msg"></p>
+</div>
+
+
 <h1>STATUS PRODUKSI</h1>
 <div id="app"></div>
 
@@ -137,6 +155,33 @@ fetch(CSV_URL)
   });
 
 });
+
+
+const POST_URL = "https://script.google.com/u/0/home/projects/1HEnJLro5-qkQ_ujVIjdXB45yfImXRmqik2SqOuYuG-RmsJs1WayszIHG/edit";
+
+document.getElementById("weekForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const week = document.getElementById("week").value;
+  const msg  = document.getElementById("msg");
+
+  fetch(POST_URL, {
+    method: "POST",
+    body: JSON.stringify({ week }),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(res => res.json())
+  .then(() => {
+    msg.innerText = "Week berhasil disimpan ✅";
+    msg.style.color = "green";
+  })
+  .catch(() => {
+    msg.innerText = "Gagal menyimpan ❌";
+    msg.style.color = "red";
+  });
+});
+
+  
 </script>
 
 </body>
