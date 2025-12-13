@@ -4,45 +4,131 @@
 <meta charset="UTF-8">
 <title>Status Produksi</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  padding: 20px;
+:root {
+  --primary: #1e88e5;
+  --secondary: #e3f2fd;
+  --success: #2e7d32;
+  --danger: #d32f2f;
+  --text-dark: #333;
 }
+
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: linear-gradient(135deg, #f4f6f8, #eef3f7);
+  padding: 30px;
+  color: var(--text-dark);
+}
+
 h1 {
   text-align: center;
+  margin: 40px 0 20px;
+  color: var(--primary);
+  letter-spacing: 1px;
 }
+
+/* Form */
+form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+form input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 120px;
+}
+
+form button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+form button:hover {
+  background: #1565c0;
+}
+
+/* Section */
 .section {
-  margin-bottom: 40px;
+  margin-bottom: 45px;
 }
+
 .section-title {
-  background: #d9ecf7;
-  padding: 6px 14px;
+  background: var(--primary);
+  color: white;
+  padding: 8px 18px;
   display: inline-block;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-weight: 600;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
+
+/* Table */
 table {
   border-collapse: collapse;
   width: 100%;
   background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
+
 th, td {
-  border: 1px solid #000;
-  padding: 6px;
+  padding: 10px;
   text-align: center;
+  border-bottom: 1px solid #e0e0e0;
 }
+
 th {
-  background: #e6f2fb;
+  background: var(--secondary);
+  font-weight: 600;
 }
+
+tr:hover {
+  background: #f9fbfd;
+}
+
+/* Status & Balance */
 .balance-negative {
-  color: red;
+  color: var(--danger);
   font-weight: bold;
 }
+
 .status-not {
-  background: red;
+  background: var(--danger);
   color: white;
   font-weight: bold;
+  border-radius: 6px;
+  padding: 4px 8px;
+  display: inline-block;
+}
+
+td:last-child:not(.status-not) {
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
 }
 </style>
 </head>
