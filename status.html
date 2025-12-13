@@ -118,13 +118,13 @@ th {
 
 <body>
 
-<form
-  method="POST"
-  action="https://script.google.com/macros/s/AKfycbxZsvwtYSqdYlshXDfmi5JfjLELs3l-IDFf8JMEl0dKbByQTVQfEUkv0ANIDXJHipRR/exec"
->
-  <input type="number" name="week" placeholder="Week" required>
+<form id="weekForm">
+  <input type="number" name="week" id="week" required>
   <button type="submit">Simpan</button>
 </form>
+
+<div id="msg"></div>
+
 
 <h1>STATUS PRODUKSI</h1>
 <div id="app"></div>
@@ -221,6 +221,31 @@ fetch(CSV_URL)
       qty1:"Qty Plan", qty2:"Qty Export"
     });
 });
+
+document.getElementById("weekForm").addEventListener("submit", function(e) {
+  e.preventDefault(); // ⛔ cegah pindah halaman
+
+  const week = document.getElementById("week").value;
+  const msg  = document.getElementById("msg");
+
+  fetch("https://script.google.com/macros/s/AKfycbxZsvwtYSqdYlshXDfmi5JfjLELs3l-IDFf8JMEl0dKbByQTVQfEUkv0ANIDXJHipRR/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: `week=${encodeURIComponent(week)}`
+  })
+  .then(res => res.text())
+  .then(res => {
+    msg.innerText = "Data berhasil disimpan";
+    msg.style.color = "green";
+  })
+  .catch(err => {
+    msg.innerText = "Gagal menyimpan data";
+    msg.style.color = "red";
+  });
+});
+  
 </script>
 
 </body>
