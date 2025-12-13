@@ -29,7 +29,7 @@ form {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 form input {
@@ -50,6 +50,12 @@ form button {
 
 form button:hover {
   background: #1565c0;
+}
+
+#msg {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
 /* SECTION */
@@ -98,7 +104,7 @@ th {
   font-weight: 600;
 }
 
-/* BALANCE */
+/* BALANCE NEGATIVE */
 .balance-negative {
   color: var(--danger);
   font-weight: 600;
@@ -115,16 +121,14 @@ th {
 }
 </style>
 </head>
-
 <body>
 
 <form id="weekForm">
-  <input type="number" name="week" id="week" required>
+  <input type="number" id="week" name="week" placeholder="Week" required>
   <button type="submit">Simpan</button>
 </form>
 
 <div id="msg"></div>
-
 
 <h1>STATUS PRODUKSI</h1>
 <div id="app"></div>
@@ -133,97 +137,88 @@ th {
 <div id="export"></div>
 
 <script>
-const CSV_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0nVNWtyTP5CJkOFoC5Ga31U-NroZ-7EsjHQL_TuzkpjXUso7hEWA6NWpYQeydSGshWd4vJCgOeTZG/pub?gid=1353631758&single=true&output=csv";
+// URL CSV Publik dari Google Sheet
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0nVNWtyTP5CJkOFoC5Ga31U-NroZ-7EsjHQL_TuzkpjXUso7hEWA6NWpYQeydSGshWd4vJCgOeTZG/pub?gid=1353631758&single=true&output=csv";
 
-fetch(CSV_URL)
-  .then(r => r.text())
-  .then(csv => {
-    const rows = csv.trim().split("\n").map(r => r.split(","));
+// Fungsi render tabel
+function renderTable(containerId, title, data, col) {
+  const container = document.getElementById(containerId);
+  container.innerHTML += `
+    <div class="section">
+      <div class="section-title">${title}</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Week</th>
+            <th>${col.qty1}</th>
+            <th>${col.qty2}</th>
+            <th>Balance</th>
+            <th>Persentase</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.map(r => `
+            <tr>
+              <td>${r[col.week]}</td>
+              <td>${r[col.q1]}</td>
+              <td>${r[col.q2]}</td>
+              <td class="${Number(r[col.balance]) < 0 ? 'balance-negative' : ''}">
+                ${r[col.balance]}
+              </td>
+              <td>${r[col.persen]}</td>
+              <td class="${
+                r[col.status].toLowerCase().includes('not')
+                  ? 'status-not'
+                  : 'status-ok'
+              }">
+                ${r[col.status]}
+              </td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
 
-    const prodFoam   = rows.slice(6, 11);
-    const prodTopper = rows.slice(14, 19);
-    const prodSpring = rows.slice(22, 27);
+// Fungsi load tabel PRODUKSI & EXPORT
+function loadTables() {
+  fetch(CSV_URL)
+    .then(r => r.text())
+    .then(csv => {
+      const rows = csv.trim().split("\n").map(r => r.split(","));
 
-    const expFoam   = rows.slice(6, 11);
-    const expTopper = rows.slice(14, 19);
-    const expSpring = rows.slice(22, 27);
+      const prodFoam   = rows.slice(6, 11);
+      const prodTopper = rows.slice(14, 19);
+      const prodSpring = rows.slice(22, 27);
 
-    function renderTable(containerId, title, data, col) {
-      document.getElementById(containerId).innerHTML += `
-        <div class="section">
-          <div class="section-title">${title}</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Week</th>
-                <th>${col.qty1}</th>
-                <th>${col.qty2}</th>
-                <th>Balance</th>
-                <th>Persentase</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${data.map(r => `
-                <tr>
-                  <td>${r[col.week]}</td>
-                  <td>${r[col.q1]}</td>
-                  <td>${r[col.q2]}</td>
-                  <td class="${Number(r[col.balance]) < 0 ? 'balance-negative' : ''}">
-                    ${r[col.balance]}
-                  </td>
-                  <td>${r[col.persen]}</td>
-                  <td class="${
-                    r[col.status].toLowerCase().includes('not')
-                      ? 'status-not'
-                      : 'status-ok'
-                  }">
-                    ${r[col.status]}
-                  </td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
+      const expFoam   = rows.slice(6, 11);
+      const expTopper = rows.slice(14, 19);
+      const expSpring = rows.slice(22, 27);
 
-    // PRODUKSI
-    renderTable("app", "Foam_Packing", prodFoam, {
-      week:1, q1:2, q2:3, balance:4, persen:5, status:6,
-      qty1:"Qty Order", qty2:"Qty Produksi"
+      // Bersihkan sebelum render ulang
+      document.getElementById("app").innerHTML = "";
+      document.getElementById("export").innerHTML = "";
+
+      // Render PRODUKSI
+      renderTable("app", "Foam_Packing", prodFoam, { week:1, q1:2, q2:3, balance:4, persen:5, status:6, qty1:"Qty Order", qty2:"Qty Produksi" });
+      renderTable("app", "Topper", prodTopper, { week:1, q1:2, q2:3, balance:4, persen:5, status:6, qty1:"Qty Order", qty2:"Qty Produksi" });
+      renderTable("app", "Spring_Packing", prodSpring, { week:1, q1:2, q2:3, balance:4, persen:5, status:6, qty1:"Qty Order", qty2:"Qty Produksi" });
+
+      // Render EXPORT
+      renderTable("export", "Foam_Packing", expFoam, { week:8, q1:9, q2:10, balance:11, persen:12, status:13, qty1:"Qty Plan", qty2:"Qty Export" });
+      renderTable("export", "Topper", expTopper, { week:8, q1:9, q2:10, balance:11, persen:12, status:13, qty1:"Qty Plan", qty2:"Qty Export" });
+      renderTable("export", "Spring_Packing", expSpring, { week:8, q1:9, q2:10, balance:11, persen:12, status:13, qty1:"Qty Plan", qty2:"Qty Export" });
     });
+}
 
-    renderTable("app", "Topper", prodTopper, {
-      week:1, q1:2, q2:3, balance:4, persen:5, status:6,
-      qty1:"Qty Order", qty2:"Qty Produksi"
-    });
+// Load tabel saat page load
+window.addEventListener("DOMContentLoaded", loadTables);
 
-    renderTable("app", "Spring_Packing", prodSpring, {
-      week:1, q1:2, q2:3, balance:4, persen:5, status:6,
-      qty1:"Qty Order", qty2:"Qty Produksi"
-    });
-
-    // EXPORT
-    renderTable("export", "Foam_Packing", expFoam, {
-      week:8, q1:9, q2:10, balance:11, persen:12, status:13,
-      qty1:"Qty Plan", qty2:"Qty Export"
-    });
-
-    renderTable("export", "Topper", expTopper, {
-      week:8, q1:9, q2:10, balance:11, persen:12, status:13,
-      qty1:"Qty Plan", qty2:"Qty Export"
-    });
-
-    renderTable("export", "Spring_Packing", expSpring, {
-      week:8, q1:9, q2:10, balance:11, persen:12, status:13,
-      qty1:"Qty Plan", qty2:"Qty Export"
-    });
-});
-
+// Submit form tanpa pindah halaman
 document.getElementById("weekForm").addEventListener("submit", function(e) {
-  e.preventDefault(); // ⛔ cegah pindah halaman
+  e.preventDefault();
 
   const week = document.getElementById("week").value;
   const msg  = document.getElementById("msg");
@@ -239,13 +234,15 @@ document.getElementById("weekForm").addEventListener("submit", function(e) {
   .then(res => {
     msg.innerText = "Data berhasil disimpan";
     msg.style.color = "green";
+
+    // Refresh tabel PRODUKSI & EXPORT
+    loadTables();
   })
   .catch(err => {
     msg.innerText = "Gagal menyimpan data";
     msg.style.color = "red";
   });
 });
-  
 </script>
 
 </body>
