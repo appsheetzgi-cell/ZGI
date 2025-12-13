@@ -44,6 +44,17 @@ th {
   color: white;
   font-weight: bold;
 }
+.balance-negative {
+  color: red;
+  font-weight: bold;
+}
+
+.status-not {
+  background: red;
+  color: white;
+  font-weight: bold;
+}
+  
 </style>
 </head>
 <body>
@@ -88,9 +99,13 @@ fetch(CSV_URL)
                   <td>${r[1]}</td>
                   <td>${r[2]}</td>
                   <td>${r[3]}</td>
-                  <td class="negative">${r[4]}</td>
+                  <td class="${Number(r[4]) < 0 ? 'balance-negative' : ''}">
+                   ${r[4]}
+                   </td>
                   <td>${r[5]}</td>
-                  <td class="status-not">${r[6]}</td>
+                  <td class="${r[6].toString().toLowerCase().includes('not') ? 'status-not' : ''}">
+                  ${r[6]}
+                   </td>
                 </tr>
               `).join("")}
             </tbody>
