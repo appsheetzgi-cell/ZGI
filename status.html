@@ -219,9 +219,7 @@ window.addEventListener("DOMContentLoaded", loadTables);
 // Submit form tanpa pindah halaman
 document.getElementById("weekForm").addEventListener("submit", function(e) {
   e.preventDefault();
-
   const week = document.getElementById("week").value;
-  const msg  = document.getElementById("msg");
 
   fetch("https://script.google.com/macros/s/AKfycbxZsvwtYSqdYlshXDfmi5JfjLELs3l-IDFf8JMEl0dKbByQTVQfEUkv0ANIDXJHipRR/exec", {
     method: "POST",
@@ -231,15 +229,14 @@ document.getElementById("weekForm").addEventListener("submit", function(e) {
     body: `week=${encodeURIComponent(week)}`
   })
   .then(res => {
-    // Refresh tabel PRODUKSI & EXPORT tanpa menampilkan pesan
+    // Refresh tabel PRODUKSI & EXPORT langsung setelah data tersimpan
     loadTables();
-})
   })
   .catch(err => {
-    msg.innerText = "Gagal menyimpan data";
-    msg.style.color = "red";
+    console.error("Gagal menyimpan data:", err);
   });
 });
+
 </script>
 
 </body>
