@@ -48,18 +48,34 @@ th {
 </head>
 <body>
 
+  
+<h2>INPUT WEEK</h2>
+
+<div class="section">
+  <div class="section-title">Input Week</div>
+
+  <!-- FORM SUBMIT LANGSUNG KE APPS SCRIPT -->
   <form
-  action="https://script.google.com/macros/s/AKfycbyFcLUntO7SO1ot6zkIopYcB4b9uj989U_8sXbwkr-rYwxWeo3yfThDu347KMvG99Mo/exec"
-  method="POST"
-  target="hidden_iframe"
->
-  <input type="number" name="week" placeholder="Masukkan Week" required>
-  <button type="submit">Simpan</button>
-</form>
+    action="https://script.google.com/macros/s/AKfycbyFcLUntO7SO1ot6zkIopYcB4b9uj989U_8sXbwkr-rYwxWeo3yfThDu347KMvG99Mo/exec"
+    method="POST"
+    target="hidden_iframe"
+  >
+    <input
+      type="number"
+      name="week"
+      placeholder="Masukkan Week"
+      required
+    >
+    <button type="submit">Simpan</button>
+  </form>
 
+  <div class="note">
+    Jika tidak ada error, data otomatis tersimpan ke Google Sheet.
+  </div>
+</div>
+
+<!-- IFRAME TERSEMBUNYI (ANTI CORS) -->
 <iframe name="hidden_iframe" style="display:none;"></iframe>
-
-
 
 <h1>STATUS PRODUKSI</h1>
 <div id="app"></div>
