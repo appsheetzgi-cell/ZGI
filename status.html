@@ -118,6 +118,56 @@ fetch(CSV_URL)
     render("Topper", topperRows);
     render("Spring_Packing", springRows);
   });
+
+<h1>STATUS EXPORT</h1>
+
+  // 🔧 ATUR BARIS EXPORT
+    const foamRows   = rows.slice(6, 11);
+    const topperRows = rows.slice(14, 19);
+    const springRows = rows.slice(22, 27);
+
+    const app = document.getElementById("app");
+
+    function render(title, data) {
+      app.innerHTML += `
+        <div class="section">
+          <div class="section-title">${title}</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th>Qty Order</th>
+                <th>Qty Export</th>
+                <th>Balance</th>
+                <th>Persentase</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.map(r => `
+                <tr>
+                  <td>${r[8]}</td>
+                  <td>${r[9]}</td>
+                  <td>${r[10]}</td>
+                  <td class="${Number(r[11]) < 0 ? 'balance-negative' : ''}">
+                   ${r[11]}
+                   </td>
+                  <td>${r[12]}</td>
+                  <td class="${r[6].toString().toLowerCase().includes('not') ? 'status-not' : ''}">
+                  ${r[13}
+                   </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    render("Foam_Packing", foamRows);
+    render("Topper", topperRows);
+    render("Spring_Packing", springRows);
+  });
 </script>
 
 </body>
