@@ -48,22 +48,17 @@ th {
 </head>
 <body>
 
-  <div class="section">
-  <div class="section-title">INPUT WEEK</div>
-  <form id="weekForm">
-    <input
-      type="number"
-      id="week"
-      placeholder="Masukkan Week"
-      required
-      style="padding:6px;width:160px;"
-    >
-    <button type="submit" style="padding:6px 14px;">
-      Simpan
-    </button>
-  </form>
-  <p id="msg"></p>
-</div>
+  <form
+  action="https://script.google.com/macros/s/AKfycbyFcLUntO7SO1ot6zkIopYcB4b9uj989U_8sXbwkr-rYwxWeo3yfThDu347KMvG99Mo/exec"
+  method="POST"
+  target="hidden_iframe"
+>
+  <input type="number" name="week" placeholder="Masukkan Week" required>
+  <button type="submit">Simpan</button>
+</form>
+
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+
 
 
 <h1>STATUS PRODUKSI</h1>
