@@ -166,37 +166,6 @@ fetch(CSV_URL)
   });
 
 });
-
-
-const POST_URL = "https://script.google.com/macros/s/AKfycbyFcLUntO7SO1ot6zkIopYcB4b9uj989U_8sXbwkr-rYwxWeo3yfThDu347KMvG99Mo/exec";
-
-document.getElementById("weekForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const week = document.getElementById("week").value;
-  const msg  = document.getElementById("msg");
-
-  const formData = new URLSearchParams();
-  formData.append("week", week);
-
-  fetch(POST_URL, {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.text())
-  .then(txt => {
-    console.log("RESP:", txt);
-    msg.innerText = "Week berhasil disimpan ✅";
-    msg.style.color = "green";
-  })
-  .catch(err => {
-    console.error(err);
-    msg.innerText = "Gagal menyimpan ❌";
-    msg.style.color = "red";
-  });
-});
-
-
   
 </script>
 
